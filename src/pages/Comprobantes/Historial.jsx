@@ -1,55 +1,58 @@
 import React from "react";
-import * as dayjs from "dayjs"
+import * as dayjs from "dayjs";
 
 import { Row, Col, Card, CardBody } from "reactstrap";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { CustomTable } from "../../components/Table";
+import { useParams } from "react-router-dom";
 
-const ClientsList = () => {
+const ComprobantesHistorial = () => {
+    const { id } = useParams();
     //meta title
     document.title = "Basic Tables ";
 
     const formatData = (data = []) => {
-        return data.map(item => ({
+        return data.map((item) => ({
             id: item.id,
-            nombre: item.nombre,
-            fecha: dayjs(item.fecha).format("DD-MM-YYYY"),
-            empresa: item.estatico.documento.empresa.nombre
-        }))
-    } 
+            nombre: item.comprobanteDiario.nombre,
+            usuario: item.usuario.nombre,
+            fecha: dayjs(item.createdAt).format("DD-MM-YYYY hh:mm:ss A"),
+        }));
+    };
 
     return (
         <React.Fragment>
             <div className="page-content">
                 <div className="container-fluid">
-                    <Breadcrumbs title="Comprobantes" breadcrumbItem="Lista" />
+                    <Breadcrumbs
+                        title="Comprobantes"
+                        breadcrumbItem="Historial"
+                    />
                     <Row>
                         <Col lg={12}>
                             <Card>
                                 <CardBody>
                                     <div className="table-responsive">
                                         <CustomTable
-                                            endpoint="/comprobante-diario"
+                                            endpoint={`/historial-comprobante-diario/${id}`}
                                             formatData={formatData}
-                                            redirectUrl="/journal-vouchers"
                                             columns={[
                                                 {
-                                                    name: "Nombre",
+                                                    name: "Comprobante",
                                                     field: "nombre",
                                                 },
                                                 {
-                                                    name: "Fecha",
-                                                    field: "fecha",
+                                                    name: "Usuario",
+                                                    field: "usuario",
                                                 },
                                                 {
-                                                    name: "Empresa",
-                                                    field: "empresa",
+                                                    name: "Fecha de Actualizacion",
+                                                    field: "fecha",
                                                 },
                                             ]}
-                                            showHistory={true}
-                                            showActions={true}
+                                            showActions={false}
                                         />
                                     </div>
                                 </CardBody>
@@ -62,4 +65,4 @@ const ClientsList = () => {
     );
 };
 
-export default ClientsList;
+export default ComprobantesHistorial;

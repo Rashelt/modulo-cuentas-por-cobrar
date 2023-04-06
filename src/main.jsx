@@ -9,6 +9,7 @@ import store  from "./store";
 
 import { ModuleRegistry } from "@ag-grid-community/core";
 import { GridChartsModule } from "@ag-grid-enterprise/charts";
+import "rsuite/dist/rsuite.min.css";
 
 ModuleRegistry.registerModules([GridChartsModule]);
 

@@ -30,9 +30,10 @@ import { loginUser, socialLogin } from "../../store/actions";
 import profile from "../../assets/images/profile-img.png";
 import logo from "../../assets/images/logo.svg";
 import useStore from "../../helpers/store";
+import { setToken } from "../../helpers/axiosClient";
 
 const Login = (props) => {
-    const { login, getRoles } = useStore();
+    const { login, getRoles, getEmpresas } = useStore();
     //meta title
     document.title = "Login ";
     const dispatch = useDispatch();
@@ -50,9 +51,9 @@ const Login = (props) => {
         }),
         onSubmit: async (values) => {
             try {
-                await login(values);
-                getRoles();
-                console.log({ history });
+                const token = await login(values);
+                setToken(token);
+                await Promise.allSettled([getRoles(), getEmpresas()]);
                 history.push("/dashboard");
             } catch (error) {}
         },

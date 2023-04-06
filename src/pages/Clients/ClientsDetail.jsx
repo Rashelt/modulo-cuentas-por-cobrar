@@ -18,29 +18,61 @@ import { useFormik } from "formik";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import { FormInput } from "../../components/FormInputs/Input";
+import { useMount } from "react-use";
+import { useHistory, useParams } from "react-router-dom";
+import { get, patch, post } from "../../helpers/axiosClient";
 
 const NewClient = () => {
-    // Form validation
+    const { id } = useParams();
+    const history = useHistory();
+    const [isEdit, setIsEdit] = useState(false);
+
+    useMount(async () => {
+        if (!id) return;
+        setIsEdit(true);
+        const data = await get(`/empresas/${id}`);
+        validation.setFieldValue("nombre", data.nombre);
+        validation.setFieldValue("descripcion", data.descripcion);
+        validation.setFieldValue("ruc", data.ruc);
+        validation.setFieldValue("telefono", data.telefono);
+    }, [id]);
+
     const validation = useFormik({
-        // enableReinitialize : use this flag when initial values needs to be changed
         enableReinitialize: true,
 
         initialValues: {
-            firstname: "",
-            lastname: "",
-            city: "",
-            state: "",
-            zip: "",
+            nombre: "",
+            descripcion: "",
+            telefono: "",
+            ruc: "",
         },
         validationSchema: Yup.object({
-            firstname: Yup.string().required("Please Enter Your First Name"),
-            lastname: Yup.string().required("Please Enter Your Last Name"),
-            city: Yup.string().required("Please Enter Your City"),
-            state: Yup.string().required("Please Enter Your State"),
-            zip: Yup.string().required("Please Enter Your Zip"),
+            nombre: Yup.string().required(
+                "Por favor ingresa el nombre del cliente"
+            ),
+            descripcion: Yup.string().required(
+                "Por favor ingresa una descripcion"
+            ),
+            telefono: Yup.string().required(
+                "Por favor ingresa un numero de telefono valido"
+            ),
+            ruc: Yup.string().required(
+                "Por favor ingresa un numero ruc valido"
+            ),
         }),
-        onSubmit: (values) => {
-            console.log("values", values);
+        onSubmit: async (values) => {
+            try {
+                if (isEdit) {
+                    await patch(`/empresas/${id}`, values);
+                    history.push(`/clients`);
+                } else {
+                    const { id } = await post(`/empresas`, values);
+                    history.push(`/clients/${id}`);
+                }
+            } catch (error) {
+                console.log(error);
+            }
         },
     });
 
@@ -53,14 +85,9 @@ const NewClient = () => {
                         <Col xl="6">
                             <Card>
                                 <CardBody>
-                                    <h4 className="card-title">
-                                        React Validation - Normal
-                                    </h4>
+                                    <h4 className="card-title">Cliente</h4>
                                     <p className="card-title-desc">
-                                        Provide valuable, actionable feedback to
-                                        your users with HTML5 form
-                                        validation–available in all our
-                                        supported browsers.
+                                        Agregar un nuevo cliente.
                                     </p>
                                     <Form
                                         className="needs-validation"
@@ -71,243 +98,52 @@ const NewClient = () => {
                                         }}
                                     >
                                         <Row>
-                                            <Col md="6">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">
-                                                        First name
-                                                    </Label>
-                                                    <Input
-                                                        name="firstname"
-                                                        placeholder="First name"
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="validationCustom01"
-                                                        onChange={
-                                                            validation.handleChange
-                                                        }
-                                                        onBlur={
-                                                            validation.handleBlur
-                                                        }
-                                                        value={
-                                                            validation.values
-                                                                .firstname || ""
-                                                        }
-                                                        invalid={
-                                                            validation.touched
-                                                                .firstname &&
-                                                            validation.errors
-                                                                .firstname
-                                                                ? true
-                                                                : false
-                                                        }
-                                                    />
-                                                    {validation.touched
-                                                        .firstname &&
-                                                    validation.errors
-                                                        .firstname ? (
-                                                        <FormFeedback type="invalid">
-                                                            {
-                                                                validation
-                                                                    .errors
-                                                                    .firstname
-                                                            }
-                                                        </FormFeedback>
-                                                    ) : null}
-                                                </FormGroup>
+                                            <Col md="4">
+                                                <FormInput
+                                                    id="validationName"
+                                                    className="mb-3"
+                                                    name="nombre"
+                                                    label="Nombre"
+                                                    placeholder="Ingrese su nombre"
+                                                    validation={validation}
+                                                />
                                             </Col>
-                                            <Col md="6">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom02">
-                                                        Last name
-                                                    </Label>
-                                                    <Input
-                                                        name="lastname"
-                                                        placeholder="Last name"
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="validationCustom02"
-                                                        onChange={
-                                                            validation.handleChange
-                                                        }
-                                                        onBlur={
-                                                            validation.handleBlur
-                                                        }
-                                                        value={
-                                                            validation.values
-                                                                .lastname || ""
-                                                        }
-                                                        invalid={
-                                                            validation.touched
-                                                                .lastname &&
-                                                            validation.errors
-                                                                .lastname
-                                                                ? true
-                                                                : false
-                                                        }
-                                                    />
-                                                    {validation.touched
-                                                        .lastname &&
-                                                    validation.errors
-                                                        .lastname ? (
-                                                        <FormFeedback type="invalid">
-                                                            {
-                                                                validation
-                                                                    .errors
-                                                                    .lastname
-                                                            }
-                                                        </FormFeedback>
-                                                    ) : null}
-                                                </FormGroup>
+                                            <Col md="4">
+                                                <FormInput
+                                                    id="validationRuc"
+                                                    className="mb-3"
+                                                    name="ruc"
+                                                    label="Numero Ruc"
+                                                    placeholder="Ej: M123817312396"
+                                                    validation={validation}
+                                                />
+                                            </Col>
+                                            <Col md="4">
+                                                <FormInput
+                                                    id="validationTelefono"
+                                                    className="mb-3"
+                                                    name="telefono"
+                                                    label="Numero Telefonico"
+                                                    placeholder="Ej: 22252635"
+                                                    validation={validation}
+                                                />
                                             </Col>
                                         </Row>
                                         <Row>
-                                            <Col md="4">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom03">
-                                                        City
-                                                    </Label>
-                                                    <Input
-                                                        name="city"
-                                                        placeholder="City"
-                                                        type="text"
-                                                        className="form-control"
-                                                        onChange={
-                                                            validation.handleChange
-                                                        }
-                                                        onBlur={
-                                                            validation.handleBlur
-                                                        }
-                                                        value={
-                                                            validation.values
-                                                                .city || ""
-                                                        }
-                                                        invalid={
-                                                            validation.touched
-                                                                .city &&
-                                                            validation.errors
-                                                                .city
-                                                                ? true
-                                                                : false
-                                                        }
-                                                    />
-                                                    {validation.touched.city &&
-                                                    validation.errors.city ? (
-                                                        <FormFeedback type="invalid">
-                                                            {
-                                                                validation
-                                                                    .errors.city
-                                                            }
-                                                        </FormFeedback>
-                                                    ) : null}
-                                                </FormGroup>
-                                            </Col>
-                                            <Col md="4">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom04">
-                                                        State
-                                                    </Label>
-                                                    <Input
-                                                        name="state"
-                                                        placeholder="State"
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="validationCustom04"
-                                                        onChange={
-                                                            validation.handleChange
-                                                        }
-                                                        onBlur={
-                                                            validation.handleBlur
-                                                        }
-                                                        value={
-                                                            validation.values
-                                                                .state || ""
-                                                        }
-                                                        invalid={
-                                                            validation.touched
-                                                                .state &&
-                                                            validation.errors
-                                                                .state
-                                                                ? true
-                                                                : false
-                                                        }
-                                                    />
-                                                    {validation.touched.state &&
-                                                    validation.errors.state ? (
-                                                        <FormFeedback type="invalid">
-                                                            {
-                                                                validation
-                                                                    .errors
-                                                                    .state
-                                                            }
-                                                        </FormFeedback>
-                                                    ) : null}
-                                                </FormGroup>
-                                            </Col>
-                                            <Col md="4">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom05">
-                                                        Zip
-                                                    </Label>
-                                                    <Input
-                                                        name="zip"
-                                                        placeholder="Zip Code"
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="validationCustom05"
-                                                        onChange={
-                                                            validation.handleChange
-                                                        }
-                                                        onBlur={
-                                                            validation.handleBlur
-                                                        }
-                                                        value={
-                                                            validation.values
-                                                                .zip || ""
-                                                        }
-                                                        invalid={
-                                                            validation.touched
-                                                                .zip &&
-                                                            validation.errors
-                                                                .zip
-                                                                ? true
-                                                                : false
-                                                        }
-                                                    />
-                                                    {validation.touched.zip &&
-                                                    validation.errors.zip ? (
-                                                        <FormFeedback type="invalid">
-                                                            {
-                                                                validation
-                                                                    .errors.zip
-                                                            }
-                                                        </FormFeedback>
-                                                    ) : null}
-                                                </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col lg="12">
-                                                <FormGroup className="mb-3">
-                                                    <div className="form-check">
-                                                        <Input
-                                                            type="checkbox"
-                                                            className="form-check-input"
-                                                            id="invalidCheck"
-                                                        />
-                                                        <Label
-                                                            className="form-check-label"
-                                                            htmlFor="invalidCheck"
-                                                        >
-                                                            {" "}
-                                                            Agree to terms and
-                                                            conditions
-                                                        </Label>
-                                                    </div>
-                                                </FormGroup>
+                                            <Col md="12">
+                                                <FormInput
+                                                    id="validationDesc"
+                                                    className="mb-3"
+                                                    type="textarea"
+                                                    name="descripcion"
+                                                    label="Descripcion"
+                                                    placeholder=""
+                                                    validation={validation}
+                                                />
                                             </Col>
                                         </Row>
                                         <Button color="primary" type="submit">
-                                            Submit form
+                                            Guardar
                                         </Button>
                                     </Form>
                                 </CardBody>

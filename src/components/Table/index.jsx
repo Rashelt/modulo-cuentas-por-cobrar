@@ -1,10 +1,8 @@
-import React, { forwardRef, useImperativeHandle } from "react";
-import PropTypes from "prop-types";
-// import { redirect  } from "react-router-dom";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { Table, IconButton, Pagination } from "rsuite";
-import "rsuite/dist/rsuite.min.css";
 import { v4 } from "uuid";
 import PencilIcon from "@rsuite/icons/legacy/Pencil";
+import HistoryIcon from "@rsuite/icons/legacy/History";
 import TrashIcon from "@rsuite/icons/legacy/Trash";
 import { get } from "../../helpers/axiosClient";
 import { useMount } from "react-use";
@@ -20,6 +18,7 @@ export const CustomTable = forwardRef((props, ref) => {
         redirectUrl,
         formatData,
         showEdit,
+        showHistory,
     } = props;
     const history = useHistory();
     const [sortColumn, setSortColumn] = React.useState();
@@ -28,6 +27,7 @@ export const CustomTable = forwardRef((props, ref) => {
     const [limit, setLimit] = React.useState(10);
     const [page, setPage] = React.useState(1);
     const [data, setData] = React.useState([]);
+    const [count, setCount] = React.useState();
 
     const ActionCell = ({ rowData, dataKey, ...props }) => {
         return (
@@ -48,8 +48,16 @@ export const CustomTable = forwardRef((props, ref) => {
                         }
                     />
                 )}
+                {showHistory && (
+                    <IconButton
+                        appearance="subtle"
+                        icon={<HistoryIcon />}
+                        onClick={() =>
+                            history.push(`${redirectUrl}/history/${rowData.id}`)
+                        }
+                    />
+                )}
                 <IconButton appearance="subtle" icon={<TrashIcon />} />
-                {/* <IconButton appearance="subtle" icon={<PdfIcon />} /> */}
             </Cell>
         );
     };
@@ -59,7 +67,13 @@ export const CustomTable = forwardRef((props, ref) => {
     });
 
     const fetchData = async () => {
-        const data = await get(endpoint);
+        const { data, count } = await get(endpoint, {
+            params: {
+                skip: page,
+                take: limit,
+            },
+        });
+        setCount(count);
         if (formatData && typeof formatData === "function") {
             setData(formatData(data));
             return;
@@ -71,31 +85,26 @@ export const CustomTable = forwardRef((props, ref) => {
         refresh: fetchData,
     }));
 
+    useEffect(() => {
+        fetchData();
+    }, [page, limit]);
+
     const handleChangeLimit = (dataKey) => {
         setPage(1);
         setLimit(dataKey);
     };
 
-    const handleSortColumn = (sortColumn, sortType) => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-            setSortColumn(sortColumn);
-            setSortType(sortType);
-        }, 500);
-    };
-
-    const tableData = data.filter((v, i) => {
-        const start = limit * (page - 1);
-        const end = start + limit;
-        return i >= start && i < end;
-    });
-
     return (
         <div>
+            <div style={{ marginBottom: 5 }}>
+                <button className="btn btn-light" onClick={() => fetchData()}>
+                    <i className="bx bx-refresh bx-spin font-size-16 align-middle me-2"></i>
+                    Refresh
+                </button>
+            </div>
             <Table
                 height={300}
-                data={tableData}
+                data={data}
                 autoHeight
                 affixHeader
                 id="table"
@@ -103,7 +112,6 @@ export const CustomTable = forwardRef((props, ref) => {
                 cellBordered
                 sortColumn={sortColumn}
                 sortType={sortType}
-                onSortColumn={handleSortColumn}
                 loading={loading}
             >
                 {(columns || []).map((column) => {
@@ -139,8 +147,8 @@ export const CustomTable = forwardRef((props, ref) => {
                     maxButtons={5}
                     size="xs"
                     layout={["total", "-", "limit", "|", "pager", "skip"]}
-                    total={data.length}
-                    limitOptions={[10, 25, 50]}
+                    total={count}
+                    limitOptions={[10, 15]}
                     limit={limit}
                     activePage={page}
                     onChangePage={setPage}
@@ -153,4 +161,5 @@ export const CustomTable = forwardRef((props, ref) => {
 
 CustomTable.defaultProps = {
     showEdit: true,
+    showHistory: false
 };

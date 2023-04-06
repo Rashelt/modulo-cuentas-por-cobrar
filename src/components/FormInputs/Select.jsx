@@ -3,18 +3,20 @@ import { FormFeedback, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 
 export const FormSelect = (props) => {
-    const { label, options, name, validation, id } = props;
+    const { label, options, name, validation } = props;
 
     return (
         <FormGroup>
-            <Label htmlFor={id}>{label}</Label>
+            <Label>{label}</Label>
             <Select
-                id={id}
+                classNamePrefix="react-select-lg"
+                indicatorSeparator={null}
                 options={options}
                 getOptionValue={(option) => option.value}
                 getOptionLabel={(option) => option.label}
                 value={validation.values[name]}
                 onChange={(value) => {
+                    console.log({ value });
                     validation.setFieldValue(name, value);
                 }}
                 className={
@@ -23,7 +25,7 @@ export const FormSelect = (props) => {
                     "is-invalid"
                 }
             />
-            {!!validation.errors[name] && validation.touched[name] && (
+            {!!validation.errors[name] && (
                 <FormFeedback className="d-block">
                     {validation.errors[name]}
                 </FormFeedback>

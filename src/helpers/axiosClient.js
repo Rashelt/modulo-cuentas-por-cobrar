@@ -12,7 +12,7 @@ axiosApi.interceptors.response.use(
 )
 
 export function setToken(token) {
-    axiosApi.defaults.headers.common["Authorization"] = token
+    axiosApi.defaults.headers.common["Authorization"] = token;
 }
 
 export async function get(url, config = {}) {

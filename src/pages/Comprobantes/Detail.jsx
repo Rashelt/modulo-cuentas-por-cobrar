@@ -24,22 +24,38 @@ import Flatpickr from "react-flatpickr";
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { AgGrid } from "../../components/AgGrid";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useMount } from "react-use";
-import { get } from "../../helpers/axiosClient";
+import { get, patch, post } from "../../helpers/axiosClient";
+import useStore from "../../helpers/store";
+import { FormDatePicker } from "../../components/FormInputs/DatePicker";
+import { FormSelect } from "../../components/FormInputs/Select";
+import { FormInput } from "../../components/FormInputs/Input";
 
 const ComprobanteDetalle = () => {
     const { id } = useParams();
+    const history = useHistory();
     const ref = useRef();
-    const [formData, setFormData] = useState();
+    const { empresas, usuario } = useStore();
     const [gridData, setGridData] = useState([]);
+    const [isEdit, setIsEdit] = useState(false);
 
     useMount(async () => {
         if (!id) return;
+        setIsEdit(true);
         const data = await get(`/comprobante-diario/${id}`);
         validation.setFieldValue("nombre", data.nombre);
         validation.setFieldValue("fecha", data.fecha);
-        setFormData(data);
+
+        const empresa = empresas?.find(
+            (empresa) => empresa.id === data.estatico.documento.empresaId
+        );
+
+        validation.setFieldValue("empresa", {
+            label: empresa.nombre,
+            value: empresa.id,
+        });
+
         setGridData(data.comprobanteDiarioItem);
     }, [id]);
 
@@ -50,6 +66,10 @@ const ComprobanteDetalle = () => {
         initialValues: {
             nombre: "",
             fecha: "",
+            empresa: {
+                label: "",
+                value: "",
+            },
         },
         validationSchema: Yup.object({
             nombre: Yup.string().required(
@@ -58,34 +78,75 @@ const ComprobanteDetalle = () => {
             fecha: Yup.string().required(
                 "Por favor ingresar una fecha al comprobante"
             ),
+            empresa: Yup.object({
+                label: Yup.string().required(),
+                value: Yup.string().required(),
+            }).required("Por selecciona una empresa"),
         }),
-        onSubmit: (values) => {
-            console.log("values", values);
+        onSubmit: async (values) => {
+            try {
+                const empresaId = values.empresa.value;
+                delete values.empresa;
+                const payload = {
+                    ...values,
+                    empresaId,
+                };
+                const rows = ref.current.getRows(["haber"]);
+                if (isEdit) {
+                    await patch(
+                        `/comprobante-diario/${id}`,
+                        {
+                            comprobante: payload,
+                            comprobanteItems: rows,
+                        },
+                        {
+                            headers: {
+                                Authorization: usuario.access_token,
+                            },
+                        }
+                    );
+                    history.push("/journal-vouchers");
+                } else {
+                    const { id } = await post(
+                        `/comprobante-diario`,
+                        {
+                            comprobante: payload,
+                            comprobanteItems: rows,
+                        },
+                        {
+                            headers: {
+                                Authorization: usuario.access_token,
+                            },
+                        }
+                    );
+                    history.push(`/journal-vouchers/${id}`);
+                }
+            } catch (error) {
+                console.log(error);
+            }
         },
     });
 
     const columns = [
         {
-            field: "sel",
-            checkboxSelection: true,
-            headerName: "",
-            maxWidth: 45,
-        },
-        {
             field: "numeroCuenta",
             headerName: "Numero Cuenta",
+            editable: true,
         },
         {
             field: "descripcion",
             headerName: "Descripcion",
+            editable: true,
         },
         {
             field: "parcial",
             headerName: "Parcial",
+            editable: true,
         },
         {
             field: "debito",
             headerName: "Debe",
+            editable: true,
         },
         {
             field: "haber",
@@ -113,118 +174,37 @@ const ComprobanteDetalle = () => {
                                     >
                                         <Row>
                                             <Col md="4">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">
-                                                        Nombre
-                                                    </Label>
-                                                    <Input
-                                                        name="nombre"
-                                                        placeholder="Nombre"
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="validationCustom01"
-                                                        onChange={
-                                                            validation.handleChange
-                                                        }
-                                                        onBlur={
-                                                            validation.handleBlur
-                                                        }
-                                                        value={
-                                                            validation.values
-                                                                .nombre || ""
-                                                        }
-                                                        invalid={
-                                                            validation.touched
-                                                                .nombre &&
-                                                            validation.errors
-                                                                .nombre
-                                                                ? true
-                                                                : false
-                                                        }
-                                                    />
-                                                    {validation.touched
-                                                        .nombre &&
-                                                    validation.errors.nombre ? (
-                                                        <FormFeedback type="invalid">
-                                                            {
-                                                                validation
-                                                                    .errors
-                                                                    .nombre
-                                                            }
-                                                        </FormFeedback>
-                                                    ) : null}
-                                                </FormGroup>
+                                                <FormSelect
+                                                    name="empresa"
+                                                    options={empresas?.map(
+                                                        (item) => ({
+                                                            value: item.id,
+                                                            label: item.nombre,
+                                                        })
+                                                    )}
+                                                    label="Cliente"
+                                                    validation={validation}
+                                                />
                                             </Col>
                                             <Col md="4">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom02">
-                                                        Fecha
-                                                    </Label>
-                                                    <Flatpickr
-                                                        id="validationCustom02"
-                                                        className="form-control"
-                                                        placeholder="M, dd,yyyy"
-                                                        readOnly={true}
-                                                        options={{
-                                                            // altInput: true,
-                                                            altFormat: "F j, Y",
-                                                            dateFormat: "d-m-Y",
-                                                        }}
-                                                        onChange={
-                                                            validation.handleChange
-                                                        }
-                                                        onBlur={
-                                                            validation.handleBlur
-                                                        }
-                                                        value={
-                                                            validation.values
-                                                                .fecha || ""
-                                                        }
-                                                        onInvalid={() =>
-                                                            validation.touched
-                                                                .fecha &&
-                                                            validation.errors
-                                                                .fecha
-                                                                ? true
-                                                                : false
-                                                        }
-                                                    />
-                                                    {/* <Input
-                                                        name="fecha"
-                                                        placeholder="Last name"
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="validationCustom02"
-                                                        onChange={
-                                                            validation.handleChange
-                                                        }
-                                                        onBlur={
-                                                            validation.handleBlur
-                                                        }
-                                                        value={
-                                                            validation.values
-                                                                .fecha || ""
-                                                        }
-                                                        invalid={
-                                                            validation.touched
-                                                                .fecha &&
-                                                            validation.errors
-                                                                .fecha
-                                                                ? true
-                                                                : false
-                                                        }
-                                                    /> */}
-                                                    {validation.touched.fecha &&
-                                                    validation.errors.fecha ? (
-                                                        <FormFeedback type="invalid">
-                                                            {
-                                                                validation
-                                                                    .errors
-                                                                    .fecha
-                                                            }
-                                                        </FormFeedback>
-                                                    ) : null}
-                                                </FormGroup>
+                                                <FormInput
+                                                    id="validationName"
+                                                    className="mb-3"
+                                                    name="nombre"
+                                                    label="Nombre"
+                                                    placeholder="Ingrese su nombre"
+                                                    validation={validation}
+                                                />
+                                            </Col>
+                                            <Col md="4">
+                                                <FormDatePicker
+                                                    id="validationFecha"
+                                                    className="mb-3"
+                                                    name="fecha"
+                                                    label="Fecha"
+                                                    placeholder="Seleccione una fecha"
+                                                    validation={validation}
+                                                />
                                             </Col>
                                         </Row>
                                         <Button color="primary" type="submit">
