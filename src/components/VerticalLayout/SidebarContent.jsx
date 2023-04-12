@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 
 //i18n
 import { withTranslation } from "react-i18next";
+import { FeatureFlag } from "../FeatureFlag";
+import { AdminWrapper } from "../AdminWrapper";
 
 const SidebarContent = (props) => {
     const ref = useRef();
@@ -329,90 +331,113 @@ const SidebarContent = (props) => {
                             </Link>
                         </li>
 
-                        <li>
-                            <Link to="/#" className="has-arrow ">
-                                <i className='bx bxs-business'></i>
-                                <span>{props.t("Clients")}</span>
-                            </Link>
-                            <ul className="sub-menu" aria-expanded="false">
-                                <li>
-                                    <Link to="/clients/create">
-                                        {props.t("New Client")}
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to="/clients">
-                                        {props.t("Clients List")}
-                                    </Link>
-                                </li>
-                            </ul>
-                        </li>
+                        <FeatureFlag label="Modulo clientes">
+                            <li>
+                                <Link to="/#" className="has-arrow ">
+                                    <i className="bx bxs-business"></i>
+                                    <span>{props.t("Clients")}</span>
+                                </Link>
+                                <ul className="sub-menu" aria-expanded="false">
+                                    <FeatureFlag label="Crear clientes">
+                                        <li>
+                                            <Link to="/clients/create">
+                                                {props.t("New Client")}
+                                            </Link>
+                                        </li>
+                                    </FeatureFlag>
+                                    <li>
+                                        <Link to="/clients">
+                                            {props.t("Clients List")}
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </li>
+                        </FeatureFlag>
 
-                        <li>
-                            <Link to="/#" className="has-arrow ">
-                                {/* <i className="bx bx-file"></i> */}
-                                <i className="fas fa-book"></i>
-                                <span>{props.t("Journal Vouchers")}</span>
-                            </Link>
-                            <ul className="sub-menu" aria-expanded="false">
-                                <li>
-                                    <Link to="/journal-vouchers/create">
-                                        {props.t("New Journal Vouchers")}
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to="/journal-vouchers">
-                                        {props.t("Journal Vouchers List")}
-                                    </Link>
-                                </li>
-                            </ul>
-                        </li>
+                        <FeatureFlag label="Modulo comprobantes">
+                            <li>
+                                <Link to="/#" className="has-arrow ">
+                                    {/* <i className="bx bx-file"></i> */}
+                                    <i className="fas fa-book"></i>
+                                    <span>{props.t("Journal Vouchers")}</span>
+                                </Link>
+                                <ul className="sub-menu" aria-expanded="false">
+                                    <FeatureFlag label="Crear comprobantes">
+                                        <li>
+                                            <Link to="/journal-vouchers/create">
+                                                {props.t(
+                                                    "New Journal Vouchers"
+                                                )}
+                                            </Link>
+                                        </li>
+                                    </FeatureFlag>
+                                    <li>
+                                        <Link to="/journal-vouchers">
+                                            {props.t("Journal Vouchers List")}
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </li>
+                        </FeatureFlag>
 
-                        <li>
-                            <Link to="/#" className="has-arrow ">
-                                {/* <i className="bx bx-file"></i> */}
-                                <i className="fas fa-file-invoice"></i>
-                                <span>{props.t("Bills")}</span>
-                            </Link>
-                            <ul className="sub-menu" aria-expanded="false">
-                                <li>
-                                    <Link to="/bills/create">
-                                        {props.t("New Bills")}
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to="/bills">
-                                        {props.t("Bills List")}
-                                    </Link>
-                                </li>
-                            </ul>
-                        </li>
+                        <FeatureFlag label="Modulo facturas">
+                            <li>
+                                <Link to="/#" className="has-arrow ">
+                                    {/* <i className="bx bx-file"></i> */}
+                                    <i className="fas fa-file-invoice"></i>
+                                    <span>{props.t("Bills")}</span>
+                                </Link>
+                                <ul className="sub-menu" aria-expanded="false">
+                                    <FeatureFlag label="Crear facturas">
+                                        <li>
+                                            <Link to="/bills/create">
+                                                {props.t("New Bills")}
+                                            </Link>
+                                        </li>
+                                    </FeatureFlag>
+                                    <li>
+                                        <Link to="/bills">
+                                            {props.t("Bills List")}
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </li>
+                        </FeatureFlag>
 
-                        <li>
-                            <Link to="/#" className="has-arrow ">
-                            <i className='bx bxs-user'></i>
-                                <span>{props.t("Users")}</span>
-                            </Link>
-                            <ul className="sub-menu" aria-expanded="false">
-                                <li>
-                                    <Link to="/users/create">
-                                        {props.t("New Users")}
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to="/users">
-                                        {props.t("Users List")}
-                                    </Link>
-                                </li>
-                            </ul>
-                        </li>
+                        <AdminWrapper>
+                            <li>
+                                <Link to="/#" className="has-arrow ">
+                                    <i className="bx bxs-user"></i>
+                                    <span>{props.t("Users")}</span>
+                                </Link>
+                                <ul className="sub-menu" aria-expanded="false">
+                                    <li>
+                                        <Link to="/users/create">
+                                            {props.t("New Users")}
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/users">
+                                            {props.t("Users List")}
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </li>
 
-                        <li>
-                            <Link to="/backups">
-                                <i className="bx bxs-data"></i>
-                                <span>{props.t("Backups")}</span>
-                            </Link>
-                        </li>
+                            <li>
+                                <Link to="/backups">
+                                    <i className="bx bxs-data"></i>
+                                    <span>{props.t("Backups")}</span>
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link to="/features-flags">
+                                    <i className="bx bxs-lock-open-alt"></i>
+                                    <span>{props.t("Features")}</span>
+                                </Link>
+                            </li>
+                        </AdminWrapper>
 
                         {/* <li>
               <Link to="/#" className="">

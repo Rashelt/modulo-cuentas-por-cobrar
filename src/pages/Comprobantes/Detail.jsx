@@ -36,7 +36,7 @@ const ComprobanteDetalle = () => {
     const { id } = useParams();
     const history = useHistory();
     const ref = useRef();
-    const { empresas, usuario } = useStore();
+    const { empresas, token } = useStore();
     const [gridData, setGridData] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
 
@@ -101,7 +101,7 @@ const ComprobanteDetalle = () => {
                         },
                         {
                             headers: {
-                                Authorization: usuario.access_token,
+                                Authorization: token,
                             },
                         }
                     );
@@ -115,7 +115,7 @@ const ComprobanteDetalle = () => {
                         },
                         {
                             headers: {
-                                Authorization: usuario.access_token,
+                                Authorization: token,
                             },
                         }
                     );

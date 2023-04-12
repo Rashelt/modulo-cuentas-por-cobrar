@@ -177,6 +177,7 @@ import UsuarioDetalle from "../pages/Usuarios/Detail";
 import UsuarioList from "../pages/Usuarios/List";
 
 import Backups from "../pages/Backups/List";
+import Features from "../pages/Features/List";
 import ComprobantesHistorial from "../pages/Comprobantes/Historial";
 import FacturasHistorial from "../pages/Facturas/Historial";
 
@@ -218,6 +219,9 @@ const authProtectedRoutes = [
 
     //backups
     { path: "/backups", component: Backups },
+
+    //backups
+    { path: "/features-flags", component: Features },
 
     //chat
     // { path: "/chat", component: Chat },

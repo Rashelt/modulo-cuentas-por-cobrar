@@ -69,8 +69,7 @@ const List = () => {
                                                     field: "fecha",
                                                 },
                                             ]}
-                                            showEdit={false}
-                                            showActions
+                                            showActions={false}
                                         />
                                     </div>
                                 </CardBody>

@@ -1,31 +1,55 @@
-import create from "zustand";
+import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { get, post } from "./axiosClient";
 
 const useStore = create(
     persist(
-        (set) => ({
+        (set, getState) => ({
             loading: false,
             hasErrors: false,
             usuario: null,
+            token: null,
             roles: [],
             empresas: [],
+            featureFlags: [],
+            featuresFlagsByUser: [],
             logout: () => set(() => ({ usuario: null })),
             login: async ({ email, password }) => {
                 set(() => ({ loading: true }));
                 try {
-                    const usuario = await post("/autenticacion/login", { correo: email, password });
-                    set(() => ({ usuario, loading: false }));
-                    return usuario.access_token;
+                    const { usuario, access_token } = await post("/autenticacion/login", { correo: email, password });
+                    set(() => ({ usuario, token: access_token, loading: false }));
+                    return access_token;
                 } catch (err) {
                     set(() => ({ hasErrors: true, loading: false }));
                     return null;
                 }
             },
+            getFeaturesFlagsByUser: async () => {
+                const usuario = getState().usuario;
+                console.log({ usuario });
+                set(() => ({ loading: true }));
+                try {
+                    const featuresFlagsByUser = await get(`/feature-flag-user/${usuario.id}`);
+                    set(() => ({ featuresFlagsByUser, loading: false }));
+                } catch (err) {
+                    set(() => ({ hasErrors: true, loading: false }));
+                }
+            },
+            getFeaturesFlags: async () => {
+                set(() => ({ loading: true }));
+                try {
+                    const featureFlags = await get("/feature-flag");
+                    set(() => ({ featureFlags, loading: false }));
+                } catch (err) {
+                    console.log(err);
+                    set(() => ({ hasErrors: true, loading: false }));
+                }
+            },
             getEmpresas: async () => {
                 set(() => ({ loading: true }));
                 try {
-                    const {data} = await get("/empresas");
+                    const { data } = await get("/empresas");
                     set(() => ({ empresas: data, loading: false }));
                 } catch (err) {
                     set(() => ({ hasErrors: true, loading: false }));

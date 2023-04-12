@@ -36,7 +36,7 @@ const FacturaDetalle = () => {
     const { id } = useParams();
     const history = useHistory();
     const ref = useRef();
-    const { empresas, usuario } = useStore();
+    const { empresas, token } = useStore();
     const [gridData, setGridData] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
 
@@ -98,7 +98,7 @@ const FacturaDetalle = () => {
                         },
                         {
                             headers: {
-                                Authorization: usuario.access_token,
+                                Authorization: token,
                             },
                         }
                     );
@@ -112,7 +112,7 @@ const FacturaDetalle = () => {
                         },
                         {
                             headers: {
-                                Authorization: usuario.access_token,
+                                Authorization: token,
                             },
                         }
                     );

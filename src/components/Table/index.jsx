@@ -1,12 +1,14 @@
 import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { Table, IconButton, Pagination } from "rsuite";
+import { confirm } from "@rsuite/interactions";
 import { v4 } from "uuid";
 import PencilIcon from "@rsuite/icons/legacy/Pencil";
 import HistoryIcon from "@rsuite/icons/legacy/History";
 import TrashIcon from "@rsuite/icons/legacy/Trash";
-import { get } from "../../helpers/axiosClient";
+import { get, del } from "../../helpers/axiosClient";
 import { useMount } from "react-use";
 import { useHistory } from "react-router-dom";
+import { FeatureFlag } from "../FeatureFlag";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -17,8 +19,8 @@ export const CustomTable = forwardRef((props, ref) => {
         endpoint,
         redirectUrl,
         formatData,
-        showEdit,
-        showHistory,
+        featureFlags,
+        showToolbar,
     } = props;
     const history = useHistory();
     const [sortColumn, setSortColumn] = React.useState();
@@ -28,6 +30,13 @@ export const CustomTable = forwardRef((props, ref) => {
     const [page, setPage] = React.useState(1);
     const [data, setData] = React.useState([]);
     const [count, setCount] = React.useState();
+
+    const onDelete = async (rowData) => {
+        try {
+            await del(`${endpoint}/${rowData.id}`);
+            return fetchData();
+        } catch (error) {}
+    };
 
     const ActionCell = ({ rowData, dataKey, ...props }) => {
         return (
@@ -39,7 +48,7 @@ export const CustomTable = forwardRef((props, ref) => {
                     justifyContent: "center",
                 }}
             >
-                {showEdit && (
+                <FeatureFlag label={featureFlags?.editar}>
                     <IconButton
                         appearance="subtle"
                         icon={<PencilIcon />}
@@ -47,8 +56,9 @@ export const CustomTable = forwardRef((props, ref) => {
                             history.push(`${redirectUrl}/${rowData.id}`)
                         }
                     />
-                )}
-                {showHistory && (
+                </FeatureFlag>
+
+                <FeatureFlag label={featureFlags?.historial}>
                     <IconButton
                         appearance="subtle"
                         icon={<HistoryIcon />}
@@ -56,8 +66,21 @@ export const CustomTable = forwardRef((props, ref) => {
                             history.push(`${redirectUrl}/history/${rowData.id}`)
                         }
                     />
-                )}
-                <IconButton appearance="subtle" icon={<TrashIcon />} />
+                </FeatureFlag>
+
+                <FeatureFlag label={featureFlags?.borrar}>
+                    <IconButton
+                        appearance="subtle"
+                        icon={<TrashIcon />}
+                        onClick={() =>
+                            confirm("Estas seguro de borrar el registro?", {
+                                okButtonText: "Si",
+                                cancelButtonText: "Cancelar",
+                                onOk: () => onDelete(rowData),
+                            })
+                        }
+                    />
+                </FeatureFlag>
             </Cell>
         );
     };
@@ -96,12 +119,17 @@ export const CustomTable = forwardRef((props, ref) => {
 
     return (
         <div>
-            <div style={{ marginBottom: 5 }}>
-                <button className="btn btn-light" onClick={() => fetchData()}>
-                    <i className="bx bx-refresh bx-spin font-size-16 align-middle me-2"></i>
-                    Refresh
-                </button>
-            </div>
+            {showToolbar ? (
+                <div style={{ marginBottom: 5 }}>
+                    <button
+                        className="btn btn-light"
+                        onClick={() => fetchData()}
+                    >
+                        <i className="bx bx-refresh bx-spin font-size-16 align-middle me-2"></i>
+                        Refresh
+                    </button>
+                </div>
+            ) : null}
             <Table
                 height={300}
                 data={data}
@@ -160,6 +188,5 @@ export const CustomTable = forwardRef((props, ref) => {
 });
 
 CustomTable.defaultProps = {
-    showEdit: true,
-    showHistory: false
+    showToolbar: true,
 };

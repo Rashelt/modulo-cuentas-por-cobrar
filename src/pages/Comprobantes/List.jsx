@@ -48,7 +48,6 @@ const ClientsList = () => {
                                                     field: "empresa",
                                                 },
                                             ]}
-                                            showHistory={true}
                                             showActions={true}
                                         />
                                     </div>

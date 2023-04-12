@@ -33,7 +33,7 @@ import useStore from "../../helpers/store";
 import { setToken } from "../../helpers/axiosClient";
 
 const Login = (props) => {
-    const { login, getRoles, getEmpresas } = useStore();
+    const { login, getRoles, getEmpresas, getFeaturesFlags, getFeaturesFlagsByUser } = useStore();
     //meta title
     document.title = "Login ";
     const dispatch = useDispatch();
@@ -53,7 +53,7 @@ const Login = (props) => {
             try {
                 const token = await login(values);
                 setToken(token);
-                await Promise.allSettled([getRoles(), getEmpresas()]);
+                await Promise.allSettled([getRoles(), getEmpresas(),getFeaturesFlags(),getFeaturesFlagsByUser()]);
                 history.push("/dashboard");
             } catch (error) {}
         },

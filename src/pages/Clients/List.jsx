@@ -23,6 +23,11 @@ const ClientsList = () => {
                                         <CustomTable
                                             endpoint="/empresas"
                                             redirectUrl="/clients"
+                                            featureFlags={{
+                                                editar: "Editar clientes",
+                                                borrar: "Borrar clientes",
+                                                historial: "Historial clientes"
+                                            }}
                                             columns={[
                                                 {
                                                     name: "Nombre",
@@ -39,7 +44,7 @@ const ClientsList = () => {
                                                 {
                                                     name: "Telefono",
                                                     field: "telefono",
-                                                }
+                                                },
                                             ]}
                                             showActions
                                         />
