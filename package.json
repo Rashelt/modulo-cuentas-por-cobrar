@@ -103,6 +103,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "sass": "^1.32.12",
+    "sonarqube-scanner": "^3.0.1",
     "vite": "^2.9.12",
     "vite-plugin-error-overlay": "^0.0.1-alpha.0"
   },
