@@ -3,14 +3,10 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { isEmpty } from "lodash";
 
-import {
-  Button,
-  Card,
-  CardBody,
-} from "reactstrap";
-import { getOrders as onGetOrders } from "../../store/actions"
+import { Button, Card, CardBody } from "reactstrap";
+import { getOrders as onGetOrders } from "../../store/actions";
 
-import EcommerceOrdersModal from "../Ecommerce/EcommerceOrders/EcommerceOrdersModal";
+// import EcommerceOrdersModal from "../Ecommerce/EcommerceOrders/EcommerceOrdersModal";
 
 import {
   OrderId,
@@ -26,10 +22,10 @@ import TableContainer from "../../components/Common/TableContainer";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
-const LatestTranaction = props => {
+const LatestTranaction = (props) => {
   const dispatch = useDispatch();
 
-  const { orders } = useSelector(state => ({
+  const { orders } = useSelector((state) => ({
     orders: state.ecommerce.orders,
   }));
 
@@ -49,7 +45,7 @@ const LatestTranaction = props => {
         Header: "#",
         filterable: true,
         disableFilters: true,
-        Cell: cellProps => {
+        Cell: (cellProps) => {
           return <input type="checkbox" />;
         },
       },
@@ -58,7 +54,7 @@ const LatestTranaction = props => {
         accessor: "orderId",
         filterable: true,
         disableFilters: true,
-        Cell: cellProps => {
+        Cell: (cellProps) => {
           return <OrderId {...cellProps} />;
         },
       },
@@ -67,7 +63,7 @@ const LatestTranaction = props => {
         accessor: "billingName",
         disableFilters: true,
         filterable: true,
-        Cell: cellProps => {
+        Cell: (cellProps) => {
           return <BillingName {...cellProps} />;
         },
       },
@@ -76,7 +72,7 @@ const LatestTranaction = props => {
         accessor: "orderdate",
         disableFilters: true,
         filterable: true,
-        Cell: cellProps => {
+        Cell: (cellProps) => {
           return <Date {...cellProps} />;
         },
       },
@@ -85,7 +81,7 @@ const LatestTranaction = props => {
         accessor: "total",
         disableFilters: true,
         filterable: true,
-        Cell: cellProps => {
+        Cell: (cellProps) => {
           return <Total {...cellProps} />;
         },
       },
@@ -94,7 +90,7 @@ const LatestTranaction = props => {
         accessor: "paymentStatus",
         disableFilters: true,
         filterable: true,
-        Cell: cellProps => {
+        Cell: (cellProps) => {
           return <PaymentStatus {...cellProps} />;
         },
       },
@@ -102,7 +98,7 @@ const LatestTranaction = props => {
         Header: "Payment Method",
         accessor: "paymentMethod",
         disableFilters: true,
-        Cell: cellProps => {
+        Cell: (cellProps) => {
           return <PaymentMethod {...cellProps} />;
         },
       },
@@ -110,7 +106,7 @@ const LatestTranaction = props => {
         Header: "View Details",
         disableFilters: true,
         accessor: "view",
-        Cell: cellProps => {
+        Cell: (cellProps) => {
           return (
             <Button
               type="button"
@@ -146,7 +142,7 @@ const LatestTranaction = props => {
 
   return (
     <React.Fragment>
-      <EcommerceOrdersModal isOpen={modal1} toggle={toggleViewModal} />
+      {/* <EcommerceOrdersModal isOpen={modal1} toggle={toggleViewModal} /> */}
       <Card>
         <CardBody>
           <div className="mb-4 h4 card-title">Latest Transaction</div>

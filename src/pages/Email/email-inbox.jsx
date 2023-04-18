@@ -27,11 +27,8 @@ import classnames from "classnames";
 
 import { map } from "lodash";
 
-// Import Editor
-// import { Editor } from "react-draft-wysiwyg";
-
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import {
   getInboxMails as onGetInboxMails,
@@ -54,10 +51,9 @@ import avatar6 from "../../assets/images/users/avatar-6.jpg";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
-const EmailInbox = props => {
-  
+const EmailInbox = (props) => {
   //meta title
-  document.title="Inbox ";
+  document.title = "Inbox ";
 
   const dispatch = useDispatch();
 
@@ -68,7 +64,7 @@ const EmailInbox = props => {
     trashmails,
     draftmails,
     sentmails,
-  } = useSelector(state => ({
+  } = useSelector((state) => ({
     inboxmails: state.mails.inboxmails,
     starredmails: state.mails.starredmails,
     importantmails: state.mails.importantmails,
@@ -103,7 +99,6 @@ const EmailInbox = props => {
                 <Button
                   type="button"
                   color="danger"
-                  
                   onClick={() => {
                     setmodal(!modal);
                   }}
@@ -321,16 +316,16 @@ const EmailInbox = props => {
                         editorClassName="editorClassName"
                       /> */}
                       <CKEditor
-                      editor={ClassicEditor}
-                      data="<p>Hello from CKEditor 5!</p>"
-                      onReady={editor => {
-                        // You can store the "editor" and use when it is needed.
-                        console.log('Editor is ready to use!', editor);
-                      }}
-                      onChange={(event, editor) => {
-                        const data = editor.getData();
-                      }}
-                    />
+                        editor={ClassicEditor}
+                        data="<p>Hello from CKEditor 5!</p>"
+                        onReady={(editor) => {
+                          // You can store the "editor" and use when it is needed.
+                          console.log("Editor is ready to use!", editor);
+                        }}
+                        onChange={(event, editor) => {
+                          const data = editor.getData();
+                        }}
+                      />
                     </form>
                   </ModalBody>
                   <ModalFooter>
@@ -558,20 +553,10 @@ const EmailInbox = props => {
                   <Col xs="7">Showing 1 - 20 of 1,524</Col>
                   <Col xs="5">
                     <div className="btn-group float-end">
-                      <Button
-                        type="button"
-                        color="success"
-                        size="sm"
-                        
-                      >
+                      <Button type="button" color="success" size="sm">
                         <i className="fa fa-chevron-left" />
                       </Button>
-                      <Button
-                        type="button"
-                        color="success"
-                        size="sm"
-                        
-                      >
+                      <Button type="button" color="success" size="sm">
                         <i className="fa fa-chevron-right" />
                       </Button>
                     </div>
