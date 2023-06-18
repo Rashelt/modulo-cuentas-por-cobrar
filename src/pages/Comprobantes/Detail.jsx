@@ -1,25 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
     Row,
     Col,
     Card,
     CardBody,
-    CardHeader,
-    FormGroup,
     Button,
-    Label,
-    Input,
     Container,
-    FormFeedback,
     Form,
 } from "reactstrap";
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
-//Import Flatepicker
-import "flatpickr/dist/themes/material_blue.css";
-import Flatpickr from "react-flatpickr";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
@@ -56,7 +47,12 @@ const ComprobanteDetalle = () => {
             value: empresa.id,
         });
 
-        setGridData(data.comprobanteDiarioItem);
+        setGridData((data.comprobanteDiarioItem || []).map(item => ({
+            ...item, children: [{
+                a2: 'level 2 - 333',
+                b2: 'level 2 - 444'
+            }]
+        })));
     }, [id]);
 
     // Form validation
@@ -127,11 +123,32 @@ const ComprobanteDetalle = () => {
         },
     });
 
+    const detailCellRendererParams = useMemo(() => {
+        return {
+            detailGridOptions: {
+                columnDefs: [
+                    { field: 'a2' },
+                    { field: 'b2' },
+                ],
+                defaultColDef: {
+                    flex: 1,
+                },
+                groupDefaultExpanded: 1,
+                masterDetail: true,
+                detailRowHeight: 35,
+            },
+            getDetailRowData: (params) => {
+                params.successCallback(params.data.children);
+            },
+        };
+    }, []);
+
     const columns = [
         {
             field: "numeroCuenta",
             headerName: "Numero Cuenta",
             editable: true,
+            cellRenderer: 'agGroupCellRenderer'
         },
         {
             field: "descripcion",
@@ -227,6 +244,11 @@ const ComprobanteDetalle = () => {
                                         height={500}
                                         data={gridData}
                                         columns={columns}
+                                        gridOptions={{
+                                            groupDefaultExpanded: 1,
+                                            masterDetail: true,
+                                            detailCellRendererParams: detailCellRendererParams
+                                        }}
                                     />
                                 </CardBody>
                             </Card>

@@ -84,7 +84,7 @@ const ForgetPasswordPage = props => {
                     </Link>
                   </div>
                   <div className="p-2">
-                    {forgetError && forgetError ? (
+                    {forgetError ? (
                       <Alert color="danger" style={{ marginTop: "13px" }}>
                         {forgetError}
                       </Alert>

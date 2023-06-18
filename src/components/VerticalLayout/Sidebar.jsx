@@ -1,13 +1,11 @@
 import PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 
 //i18n
 import { withTranslation } from "react-i18next";
 import SidebarContent from "./SidebarContent";
-
-import { Link } from "react-router-dom";
 
 import logo from "../../assets/images/logo.svg";
 import logoLightPng from "../../assets/images/logo-light.png";
@@ -39,7 +37,7 @@ const Sidebar = props => {
           </Link>
         </div>
         <div data-simplebar className="h-100">
-          {props.type !== "condensed" ? <SidebarContent /> : <SidebarContent />}
+        <SidebarContent />
         </div>
         
         <div className="sidebar-background"></div>

@@ -9,7 +9,7 @@ import _ from "lodash";
 import { selectionColumn } from "./customColumns";
 
 export const AgGrid = forwardRef((props, ref) => {
-    const { data, columns, gridOptions, showSelectColumn = true } = props;
+    const { data, columns, gridOptions, showSelectColumn } = props;
     const [gridApi, setGridApi] = useState();
     const [, setColumnApi] = useState();
 
@@ -19,7 +19,7 @@ export const AgGrid = forwardRef((props, ref) => {
             getApi: () => gridApi,
             getRows: (ignoreColumns = []) => {
                 const rowData = [];
-                gridApi.forEachNode((node) => {
+                gridApi?.forEachNode((node) => {
                     rowData.push(_.omit(node.data, ignoreColumns));
                 });
                 return rowData;
@@ -36,6 +36,15 @@ export const AgGrid = forwardRef((props, ref) => {
         return colDefinitions;
     }, [columns, showSelectColumn]);
 
+    console.log({
+        data,
+        columnDefs,
+        detailCellRendererParams: gridOptions.detailCellRendererParams,
+        masterDetail: gridOptions.masterDetail
+    })
+
+
+
     return (
         <div>
             <div style={{ marginBottom: 5 }}>
@@ -48,7 +57,7 @@ export const AgGrid = forwardRef((props, ref) => {
                             .reduce((accumulator, value) => {
                                 return { ...accumulator, [value]: "" };
                             }, {});
-                        gridApi.applyTransaction({
+                        gridApi?.applyTransaction({
                             add: [{ isNewRow: true, ...emptyRow }],
                         });
                     }}
@@ -70,6 +79,9 @@ export const AgGrid = forwardRef((props, ref) => {
                         setGridApi(params.api);
                         setColumnApi(params.columnApi);
                     }}
+                    groupDefaultExpanded={gridOptions.groupDefaultExpanded}
+                    masterDetail={gridOptions.masterDetail}
+                    detailCellRendererParams={gridOptions.detailCellRendererParams}
                     headerHeight={35}
                     rowHeight={35}
                     gridOptions={{
@@ -82,3 +94,7 @@ export const AgGrid = forwardRef((props, ref) => {
         </div>
     );
 });
+
+AgGrid.defaultProps = {
+    showSelectColumn: false
+}

@@ -22,11 +22,13 @@ import { FormInput } from "../../components/FormInputs/Input";
 import { useMount } from "react-use";
 import { useHistory, useParams } from "react-router-dom";
 import { get, patch, post } from "../../helpers/axiosClient";
+import useStore from "../../helpers/store";
 
 const NewClient = () => {
     const { id } = useParams();
     const history = useHistory();
     const [isEdit, setIsEdit] = useState(false);
+    const { getEmpresas } = useStore();
 
     useMount(async () => {
         if (!id) return;
@@ -65,9 +67,11 @@ const NewClient = () => {
             try {
                 if (isEdit) {
                     await patch(`/empresas/${id}`, values);
+                    await getEmpresas();
                     history.push(`/clients`);
                 } else {
                     const { id } = await post(`/empresas`, values);
+                    await getEmpresas();
                     history.push(`/clients/${id}`);
                 }
             } catch (error) {

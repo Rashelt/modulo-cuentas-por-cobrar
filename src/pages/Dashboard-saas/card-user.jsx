@@ -17,7 +17,7 @@ function CardUser(props) {
   const [settingsMenu, setSettingsMenu] = useState(false)
   //Setting Menu
   const toggleSettings = () => {
-    setSettingsMenu(settingsMenu)
+    setSettingsMenu(!settingsMenu)
   }
 
   return (

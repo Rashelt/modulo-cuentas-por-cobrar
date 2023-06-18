@@ -11,13 +11,6 @@ import ComprobantesList from "../pages/Comprobantes/List";
 import FacturaDetalle from "../pages/Facturas/Detail";
 import FacturaList from "../pages/Facturas/List";
 
-// // //Email
-// import EmailInbox from "../pages/Email/email-inbox";
-// import EmailRead from "../pages/Email/email-read";
-// import EmailBasicTemplte from "../pages/Email/email-basic-templte";
-// import EmailAlertTemplte from "../pages/Email/email-template-alert";
-// import EmailTemplateBilling from "../pages/Email/email-template-billing";
-
 // // Authentication related pages
 import Login from "../pages/Authentication/Login";
 import Logout from "../pages/Authentication/Logout";
@@ -48,6 +41,7 @@ import UsuarioList from "../pages/Usuarios/List";
 
 import Backups from "../pages/Backups/List";
 import Features from "../pages/Features/List";
+import Help from "../pages/Help";
 import ComprobantesHistorial from "../pages/Comprobantes/Historial";
 import FacturasHistorial from "../pages/Facturas/Historial";
 
@@ -84,13 +78,7 @@ const authProtectedRoutes = [
 
   //backups
   { path: "/features-flags", component: Features },
-
-  //Email
-  // { path: "/email-inbox", component: EmailInbox },
-  // { path: "/email-read", component: EmailRead },
-  // { path: "/email-template-basic", component: EmailBasicTemplte },
-  // { path: "/email-template-alert", component: EmailAlertTemplte },
-  // { path: "/email-template-billing", component: EmailTemplateBilling },
+  { path: "/help", component: Help },
 
   { path: "/contacts-profile", component: ContactsProfile },
 

@@ -53,7 +53,6 @@ const List = () => {
                                             ref={ref}
                                             endpoint="/backups"
                                             formatData={formatData}
-                                            redirectUrl="/facturas/"
                                             columns={[
                                                 {
                                                     name: "Nombre",
@@ -69,7 +68,7 @@ const List = () => {
                                                     field: "fecha",
                                                 },
                                             ]}
-                                            showActions={false}
+                                            showActions
                                         />
                                     </div>
                                 </CardBody>

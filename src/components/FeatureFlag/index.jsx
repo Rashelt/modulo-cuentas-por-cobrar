@@ -21,6 +21,5 @@ export const FeatureFlag = memo((props) => {
         setShow(!!isFeatured);
     }, []);
 
-    // return <>{show ? props.children : null}</>;
     return <div className={!show && "d-none"}>{props.children}</div>;
 });
