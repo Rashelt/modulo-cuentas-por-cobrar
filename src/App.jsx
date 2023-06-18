@@ -26,32 +26,10 @@ import fakeBackend from "/src/helpers/AuthType/fakeBackend";
 // Activating fake backend
 fakeBackend();
 
-// const firebaseConfig = {
-//   apiKey: import.meta.env.VITE_APP_APIKEY,
-//   authDomain: import.meta.env.VITE_APP_AUTHDOMAIN,
-//   databaseURL: import.meta.env.VITE_APP_DATABASEURL,
-//   projectId: import.meta.env.VITE_APP_PROJECTID,
-//   storageBucket: import.meta.env.VITE_APP_STORAGEBUCKET,
-//   messagingSenderId: import.meta.env.VITE_APP_MESSAGINGSENDERID,
-//   appId: import.meta.env.VITE_APP_APPID,
-//   measurementId: import.meta.env.VITE_APP_MEASUREMENTID,
-// };
-
-// init firebase backend
-// initFirebaseBackend(firebaseConfig)
-
 const App = (props) => {
   function getLayout() {
-    let layoutCls = VerticalLayout;
-    switch (props.layout.layoutType) {
-      case "horizontal":
-        layoutCls = HorizontalLayout;
-        break;
-      default:
-        layoutCls = VerticalLayout;
-        break;
-    }
-    return layoutCls;
+    if (props.layout.layoutType === "horizontal") return HorizontalLayout;
+    return VerticalLayout;
   }
 
   const Layout = getLayout();

@@ -26,13 +26,9 @@ import bgimg1 from "../../assets/images/sidebar/img1.jpg";
 import bgimg2 from "../../assets/images/sidebar/img2.jpg";
 import bgimg3 from "../../assets/images/sidebar/img3.jpg";
 import bgimg4 from "../../assets/images/sidebar/img4.jpg";
-import layout1 from "../../assets/images/layouts/layout-1.jpg";
-import layout2 from "../../assets/images/layouts/layout-2.jpg";
-import layout3 from "../../assets/images/layouts/layout-3.jpg";
 
 //constants
 import {
-  layoutTypes,
   layoutWidthTypes,
   topBarThemeTypes,
   leftBarThemeImageTypes,
@@ -41,12 +37,6 @@ import {
 } from "../../constants/layout";
 
 const RightSidebar = (props) => {
-  const onCloseRightBar = () => {
-    const { onClose } = props;
-    if (onClose) {
-      onClose();
-    }
-  };
   return (
     <React.Fragment>
       <div className="right-bar" id="right-bar">
@@ -69,38 +59,6 @@ const RightSidebar = (props) => {
             <hr className="my-0" />
 
             <div className="p-4">
-              {/* <div className="radio-toolbar">
-              <span className="mb-2 d-block">Layouts</span>
-              <input
-                type="radio"
-                id="radioVertical"
-                name="radioFruit"
-                value={layoutTypes.VERTICAL}
-                checked={props.layoutType === layoutTypes.VERTICAL}
-                onChange={e => {
-                  if (e.target.checked) {
-                    props.changeLayout(e.target.value);
-                  }
-                }}
-              />
-              <label className="me-1" htmlFor="radioVertical">Vertical</label>
-              <input
-                type="radio"
-                id="radioHorizontal"
-                name="radioFruit"
-                value={layoutTypes.HORIZONTAL}
-                checked={props.layoutType === layoutTypes.HORIZONTAL}
-                onChange={e => {
-                  if (e.target.checked) {
-                    props.changeLayout(e.target.value);
-                  }
-                }}
-              />
-              <label htmlFor="radioHorizontal">Horizontal</label>
-            </div> */}
-
-              {/* <hr className="mt-1" /> */}
-
               <div className="radio-toolbar">
                 <span className="mb-2 d-block" id="radio-title">
                   Layout Width

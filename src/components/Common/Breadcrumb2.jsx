@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from 'prop-types'
 import { Link } from "react-router-dom"
 import { Row, Col, BreadcrumbItem } from "reactstrap"
+import { v4 } from "uuid"
 
 const Breadcrumb = props => {
   const { title, breadcrumbItems } = props
@@ -15,7 +16,7 @@ const Breadcrumb = props => {
           <div className="page-title-right">
             <ol className="breadcrumb m-0">
               {breadcrumbItems.map((item, key) => (
-                <BreadcrumbItem key={key} active={key + 1 === itemLength}>
+                <BreadcrumbItem key={v4()} active={key + 1 === itemLength}>
                   <Link to="#">{item.title}</Link>
                 </BreadcrumbItem>
               ))}

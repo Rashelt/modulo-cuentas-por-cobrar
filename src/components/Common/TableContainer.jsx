@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import {
   useTable,
   useGlobalFilter,
-  useAsyncDebounce,
   useSortBy,
   useFilters,
   useExpanded,
@@ -12,49 +11,9 @@ import {
 import { Table, Row, Col, Button, Input } from "reactstrap";
 import { Filter, DefaultColumnFilter } from "./filters";
 
-// Define a default UI for filtering
-function GlobalFilter({
-  preGlobalFilteredRows,
-  globalFilter,
-  setGlobalFilter,
-}) {
-  const count = preGlobalFilteredRows.length;
-  const [value, setValue] = React.useState(globalFilter);
-  const onChange = useAsyncDebounce(value => {
-    setGlobalFilter(value || undefined);
-  }, 200);
-
-  return (
-    <Col sm={4}>
-      <div className="search-box me-2 mb-2 d-inline-block">
-        <div className="position-relative">
-          <label htmlFor="search-bar-0" className="search-label">
-            <span id="search-bar-0-label" className="sr-only">
-              Search this table
-            </span>
-            <input
-              onChange={e => {
-                setValue(e.target.value);
-                onChange(e.target.value);
-              }}
-              id="search-bar-0"
-              type="text"
-              className="form-control"
-              placeholder={`${count} records...`}
-              value={value || ""}
-            />
-          </label>
-          <i className="bx bx-search-alt search-icon"></i>
-        </div>
-      </div>
-    </Col>
-  );
-}
-
     const TableContainer = ({
       columns,
       data,
-      isGlobalFilter,
       isAddOptions,
       isAddUserList,
       handleOrderClicks,
@@ -79,9 +38,6 @@ function GlobalFilter({
         nextPage,
         previousPage,
         setPageSize,
-        state,
-        preGlobalFilteredRows,
-        setGlobalFilter,
         state: { pageIndex, pageSize },
       } = useTable(
         {
@@ -106,7 +62,8 @@ function GlobalFilter({
   );
 
   const generateSortingIndicator = column => {
-    return column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : "";
+    if(column.isSorted) return column.isSortedDesc ? " 🔽" : " 🔼";
+    return "";
   };
 
   const onChangeInSelect = event => {
@@ -117,6 +74,7 @@ function GlobalFilter({
     const page = event.target.value ? Number(event.target.value) - 1 : 0;
     gotoPage(page);
   };
+
   return (
     <Fragment>
       <Row className="mb-2">
@@ -133,13 +91,6 @@ function GlobalFilter({
             ))}
           </select>
         </Col>
-        {/* {isGlobalFilter && (
-          <GlobalFilter
-            preGlobalFilteredRows={preGlobalFilteredRows}
-            globalFilter={state.globalFilter}
-            setGlobalFilter={setGlobalFilter}
-          />
-        )} */}
         {isAddOptions && (
           <Col sm="11">
             <div className="text-sm-end">

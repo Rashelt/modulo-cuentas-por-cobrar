@@ -73,7 +73,7 @@ const List = () => {
     const onSave = async () => {
         try {
             await post("/feature-flag-user/bulk", {
-                usuarioId: selectedValue.value,
+                usuarioId: selectedValue?.value,
                 featureFlagIds: featuresByUser,
             });
             toast.success("Guardado correctamente");
@@ -96,10 +96,10 @@ const List = () => {
                                             <Select
                                                 options={options}
                                                 getOptionValue={(option) =>
-                                                    option.value
+                                                    option?.value
                                                 }
                                                 getOptionLabel={(option) =>
-                                                    option.label
+                                                    option?.label
                                                 }
                                                 value={selectedValue}
                                                 onChange={(value) => {

@@ -33,19 +33,19 @@ const Navbar = props => {
   const [utility, setutility] = useState(false);
 
   useEffect(() => {
-    var matchingMenuItem = null;
-    var ul = document.getElementById("navigation");
-    var items = ul.getElementsByTagName("a");
-    for (var i = 0; i < items.length; ++i) {
-      if (props.location.pathname === items[i].pathname) {
-        matchingMenuItem = items[i];
+    let matchingMenuItem = null;
+    let ul = document.getElementById("navigation");
+    let items = ul.getElementsByTagName("a");
+    for (const item of items) {
+      if (props.location.pathname === item.pathname) {
+        matchingMenuItem = item;
         break;
       }
     }
     if (matchingMenuItem) {
       activateParentDropdown(matchingMenuItem);
     }
-  }); 
+  });
 
   function activateParentDropdown(item) {
     item.classList.add("active");
@@ -115,7 +115,7 @@ const Navbar = props => {
                     </Link>
                     <Link to="/blog" className="dropdown-item">
                       {props.t("Blog")}
-                    </Link> 
+                    </Link>
                   </div>
                 </li>
 
@@ -172,8 +172,8 @@ const Navbar = props => {
                             {props.t("Modals")}
                           </Link>
                           <Link to="/ui-offcanvas" className="dropdown-item">
-                              {props.t("Offcanvas")}
-                            </Link>
+                            {props.t("Offcanvas")}
+                          </Link>
                           <Link to="/ui-rangeslider" className="dropdown-item">
                             {props.t("Range Slider")}
                           </Link>
@@ -188,7 +188,7 @@ const Navbar = props => {
                           </Link>
                           <Link to="/ui-placeholders" className="dropdown-item">
                             {props.t("Placeholders")}
-                          </Link>                          
+                          </Link>
                           <Link
                             to="/ui-tabs-accordions"
                             className="dropdown-item"
@@ -199,8 +199,8 @@ const Navbar = props => {
                             {props.t("Typography")}
                           </Link>
                           <Link to="/ui-toasts" className="dropdown-item">
-                              {props.t("Toasts")}
-                            </Link>
+                            {props.t("Toasts")}
+                          </Link>
                           <Link to="/ui-video" className="dropdown-item">
                             {props.t("Video")}
                           </Link>
@@ -222,7 +222,7 @@ const Navbar = props => {
                           </Link>
                           <Link to="/ui-breadcrumb" className="dropdown-item">
                             {props.t("Breadcrumb")}
-                          </Link>                          
+                          </Link>
                         </div>
                       </Col>
                     </Row>

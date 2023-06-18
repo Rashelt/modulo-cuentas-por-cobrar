@@ -4,6 +4,7 @@ import { confirm } from "@rsuite/interactions";
 import { v4 } from "uuid";
 import PencilIcon from "@rsuite/icons/legacy/Pencil";
 import HistoryIcon from "@rsuite/icons/legacy/History";
+import MoveDownIcon from '@rsuite/icons/MoveDown';
 import TrashIcon from "@rsuite/icons/legacy/Trash";
 import { get, del } from "../../helpers/axiosClient";
 import { useMount } from "react-use";
@@ -35,8 +36,14 @@ export const CustomTable = forwardRef((props, ref) => {
         try {
             await del(`${endpoint}/${rowData.id}`);
             return fetchData();
-        } catch (error) {}
+        } catch (error) { }
     };
+
+    const onRestore = async (rowData) => {
+        try {
+            await get(`shared/db-restore/${rowData.id}`);
+        } catch (error) { }
+    }
 
     const ActionCell = ({ rowData, dataKey, ...props }) => {
         return (
@@ -48,7 +55,7 @@ export const CustomTable = forwardRef((props, ref) => {
                     justifyContent: "center",
                 }}
             >
-                <FeatureFlag label={featureFlags?.editar}>
+                {redirectUrl && <FeatureFlag label={featureFlags?.editar}>
                     <IconButton
                         appearance="subtle"
                         icon={<PencilIcon />}
@@ -56,15 +63,23 @@ export const CustomTable = forwardRef((props, ref) => {
                             history.push(`${redirectUrl}/${rowData.id}`)
                         }
                     />
-                </FeatureFlag>
+                </FeatureFlag>}
 
-                <FeatureFlag label={featureFlags?.historial}>
+                {redirectUrl && <FeatureFlag label={featureFlags?.historial}>
                     <IconButton
                         appearance="subtle"
                         icon={<HistoryIcon />}
                         onClick={() =>
                             history.push(`${redirectUrl}/history/${rowData.id}`)
                         }
+                    />
+                </FeatureFlag>}
+
+                <FeatureFlag label={featureFlags?.restaurar}>
+                    <IconButton
+                        appearance="subtle"
+                        icon={<MoveDownIcon />}
+                        onClick={() => onRestore(rowData)}
                     />
                 </FeatureFlag>
 
@@ -138,8 +153,8 @@ export const CustomTable = forwardRef((props, ref) => {
                 id="table"
                 bordered
                 cellBordered
-                sortColumn={sortColumn}
-                sortType={sortType}
+                // sortColumn={sortColumn}
+                // sortType={sortType}
                 loading={loading}
             >
                 {(columns || []).map((column) => {

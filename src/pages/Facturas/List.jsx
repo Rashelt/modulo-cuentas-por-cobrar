@@ -48,7 +48,7 @@ const List = () => {
                                                     field: "empresa",
                                                 },
                                             ]}
-                                            showActions={true}
+                                            showActions
                                         />
                                     </div>
                                 </CardBody>
