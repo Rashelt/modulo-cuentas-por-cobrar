@@ -10,6 +10,8 @@ import { get, del } from "../../helpers/axiosClient";
 import { useMount } from "react-use";
 import { useHistory } from "react-router-dom";
 import { FeatureFlag } from "../FeatureFlag";
+import { withTranslation } from "react-i18next";
+import useStore from "../../helpers/store";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -22,6 +24,7 @@ export const CustomTable = forwardRef((props, ref) => {
         formatData,
         featureFlags,
         showToolbar,
+        toolbarOptions
     } = props;
     const history = useHistory();
     const [sortColumn, setSortColumn] = React.useState();
@@ -31,6 +34,7 @@ export const CustomTable = forwardRef((props, ref) => {
     const [page, setPage] = React.useState(1);
     const [data, setData] = React.useState([]);
     const [count, setCount] = React.useState();
+    const { empresaSeleccionada } = useStore();
 
     const onDelete = async (rowData) => {
         try {
@@ -75,13 +79,13 @@ export const CustomTable = forwardRef((props, ref) => {
                     />
                 </FeatureFlag>}
 
-                <FeatureFlag label={featureFlags?.restaurar}>
-                    <IconButton
+                {
+                    toolbarOptions?.restore && <IconButton
                         appearance="subtle"
                         icon={<MoveDownIcon />}
                         onClick={() => onRestore(rowData)}
                     />
-                </FeatureFlag>
+                }
 
                 <FeatureFlag label={featureFlags?.borrar}>
                     <IconButton
@@ -105,10 +109,13 @@ export const CustomTable = forwardRef((props, ref) => {
     });
 
     const fetchData = async () => {
+        let extraParams = {};
+        if (empresaSeleccionada) extraParams = { empresa: empresaSeleccionada }
         const { data, count } = await get(endpoint, {
             params: {
                 skip: page,
                 take: limit,
+                ...extraParams
             },
         });
         setCount(count);
@@ -135,14 +142,26 @@ export const CustomTable = forwardRef((props, ref) => {
     return (
         <div>
             {showToolbar ? (
-                <div style={{ marginBottom: 5 }}>
-                    <button
-                        className="btn btn-light"
-                        onClick={() => fetchData()}
-                    >
-                        <i className="bx bx-refresh bx-spin font-size-16 align-middle me-2"></i>
-                        Refresh
-                    </button>
+                <div style={{ marginBottom: 5, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div className="app-search d-none d-lg-block">
+                        <div className="position-relative">
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Buscar..."
+                            />
+                            <span className="bx bx-search-alt" />
+                        </div>
+                    </div>
+                    <div>
+                        <button
+                            className="btn btn-light"
+                            onClick={() => fetchData()}
+                        >
+                            <i className="bx bx-refresh bx-spin font-size-16 align-middle me-2"></i>
+                            Refresh
+                        </button>
+                    </div>
                 </div>
             ) : null}
             <Table

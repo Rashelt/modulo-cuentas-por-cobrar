@@ -41,8 +41,8 @@ const List = () => {
                                                         await get(
                                                             "/shared/db-backup"
                                                         );
-                                                        return ref.current.refresh();
-                                                    } catch (error) {}
+                                                        return ref.current?.refresh();
+                                                    } catch (error) { }
                                                 }}
                                             >
                                                 <i className="bx bx-plus label-icon"></i>{" "}
@@ -53,6 +53,9 @@ const List = () => {
                                             ref={ref}
                                             endpoint="/backups"
                                             formatData={formatData}
+                                            toolbarOptions={{
+                                                restore: true
+                                            }}
                                             columns={[
                                                 {
                                                     name: "Nombre",

@@ -8,12 +8,16 @@ const useStore = create(
             loading: false,
             hasErrors: false,
             usuario: null,
+            empresaSeleccionada: null,
             token: null,
             roles: [],
             empresas: [],
             featureFlags: [],
             featuresFlagsByUser: [],
             logout: () => set(() => ({ usuario: null })),
+            updateEmpresaSeleccionada: (empresaSeleccionada) => {
+                set(() => ({ empresaSeleccionada }))
+            },
             login: async ({ email, password }) => {
                 set(() => ({ loading: true }));
                 try {

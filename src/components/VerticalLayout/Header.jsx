@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -10,6 +10,7 @@ import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDr
 import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu";
 import logo from "../../assets/images/logo.svg";
 import logoLightSvg from "../../assets/images/logo-light.svg";
+import Select from "react-select";
 
 //i18n
 import { withTranslation } from "react-i18next";
@@ -20,9 +21,22 @@ import {
   toggleLeftmenu,
   changeSidebarType,
 } from "../../store/actions";
+import useStore from "../../helpers/store";
+import { useMount } from "react-use";
 
 const Header = (props) => {
+  const { empresas, getEmpresas, updateEmpresaSeleccionada } = useStore();
   const [search, setsearch] = useState(false);
+  const [selectedValue, setSelectedValue] = useState();
+  const [options, setOptions] = useState([]);
+
+  useMount(async () => {
+    await getEmpresas()
+  })
+
+  useEffect(() => {
+    setOptions(empresas.map(item => ({ value: item.id, label: item.nombre })));
+  }, [empresas])
 
   function toggleFullscreen() {
     if (
@@ -65,7 +79,7 @@ const Header = (props) => {
     <React.Fragment>
       <header id="page-topbar">
         <div className="navbar-header">
-          <div className="d-flex">
+          <div className="d-flex align-items-center">
             <div className="navbar-brand-box d-lg-none d-md-block">
               <Link to="/" className="logo logo-dark">
                 <span className="logo-sm">
@@ -90,17 +104,25 @@ const Header = (props) => {
             >
               <i className="fa fa-fw fa-bars" />
             </button>
-
-            <form className="app-search d-none d-lg-block">
-              <div className="position-relative">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder={props.t("Search") + "..."}
-                />
-                <span className="bx bx-search-alt" />
-              </div>
-            </form>
+            <Select
+              styles={{
+                container: (baseStyles, state) => ({
+                  width: 250
+                })
+              }}
+              options={options}
+              getOptionValue={(option) =>
+                option?.value
+              }
+              getOptionLabel={(option) =>
+                option?.label
+              }
+              value={selectedValue}
+              onChange={(value) => {
+                setSelectedValue(value);
+                updateEmpresaSeleccionada(value.value);
+              }}
+            />
           </div>
           <div className="d-flex">
             <div className="dropdown d-inline-block d-lg-none ms-2">
@@ -142,7 +164,7 @@ const Header = (props) => {
               </div>
             </div>
 
-            <LanguageDropdown />
+            {/* <LanguageDropdown /> */}
 
             <div className="dropdown d-none d-lg-inline-block ms-1">
               <button
@@ -157,7 +179,7 @@ const Header = (props) => {
               </button>
             </div>
 
-            <NotificationDropdown />
+            {/* <NotificationDropdown /> */}
             <ProfileMenu />
 
             <div
