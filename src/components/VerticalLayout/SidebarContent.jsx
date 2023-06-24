@@ -112,78 +112,81 @@ const SidebarContent = (props) => {
                             </Link>
                         </li>
 
-                        <FeatureFlag label="Modulo clientes">
-                            <li>
+
+                        <li>
+                            <FeatureFlag label="Modulo clientes">
                                 <Link to="/#" className="has-arrow ">
                                     <i className="bx bxs-business"></i>
                                     <span>{props.t("Clients")}</span>
                                 </Link>
-                                <ul className="sub-menu" aria-expanded="false">
-                                    <FeatureFlag label="Crear clientes">
-                                        <li>
-                                            <Link to="/clients/create">
-                                                {props.t("New Client")}
-                                            </Link>
-                                        </li>
-                                    </FeatureFlag>
+                            </FeatureFlag>
+                            <ul className="sub-menu" aria-expanded="false">
+                                <FeatureFlag label="Crear clientes">
                                     <li>
-                                        <Link to="/clients">
-                                            {props.t("Clients List")}
+                                        <Link to="/clients/create">
+                                            {props.t("New Client")}
                                         </Link>
                                     </li>
-                                </ul>
-                            </li>
-                        </FeatureFlag>
+                                </FeatureFlag>
+                                <li>
+                                    <Link to="/clients">
+                                        {props.t("Clients List")}
+                                    </Link>
+                                </li>
+                            </ul>
+                        </li>
 
-                        <FeatureFlag label="Modulo comprobantes">
-                            <li>
+                        <li>
+                            <FeatureFlag label="Modulo comprobantes">
                                 <Link to="/#" className="has-arrow ">
                                     {/* <i className="bx bx-file"></i> */}
                                     <i className="fas fa-book"></i>
                                     <span>{props.t("Journal Vouchers")}</span>
                                 </Link>
-                                <ul className="sub-menu" aria-expanded="false">
-                                    <FeatureFlag label="Crear comprobantes">
-                                        <li>
-                                            <Link to="/journal-vouchers/create">
-                                                {props.t(
-                                                    "New Journal Vouchers"
-                                                )}
-                                            </Link>
-                                        </li>
-                                    </FeatureFlag>
+                            </FeatureFlag>
+                            <ul className="sub-menu" aria-expanded="false">
+                                <FeatureFlag label="Crear comprobantes">
                                     <li>
-                                        <Link to="/journal-vouchers">
-                                            {props.t("Journal Vouchers List")}
+                                        <Link to="/journal-vouchers/create">
+                                            {props.t(
+                                                "New Journal Vouchers"
+                                            )}
                                         </Link>
                                     </li>
-                                </ul>
-                            </li>
-                        </FeatureFlag>
+                                </FeatureFlag>
+                                <FeatureFlag label="Visualizar clientes">
+                                <li>
+                                    <Link to="/journal-vouchers">
+                                        {props.t("Journal Vouchers List")}
+                                    </Link>
+                                </li>
+                                </FeatureFlag>
+                            </ul>
+                        </li>
 
-                        <FeatureFlag label="Modulo facturas">
-                            <li>
+                        <li>
+                            <FeatureFlag label="Modulo facturas">
                                 <Link to="/#" className="has-arrow ">
                                     {/* <i className="bx bx-file"></i> */}
                                     <i className="fas fa-file-invoice"></i>
                                     <span>{props.t("Bills")}</span>
                                 </Link>
-                                <ul className="sub-menu" aria-expanded="false">
-                                    <FeatureFlag label="Crear facturas">
-                                        <li>
-                                            <Link to="/bills/create">
-                                                {props.t("New Bills")}
-                                            </Link>
-                                        </li>
-                                    </FeatureFlag>
+                            </FeatureFlag>
+                            <ul className="sub-menu" aria-expanded="false">
+                                <FeatureFlag label="Crear facturas">
                                     <li>
-                                        <Link to="/bills">
-                                            {props.t("Bills List")}
+                                        <Link to="/bills/create">
+                                            {props.t("New Bills")}
                                         </Link>
                                     </li>
-                                </ul>
-                            </li>
-                        </FeatureFlag>
+                                </FeatureFlag>
+                                <li>
+                                    <Link to="/bills">
+                                        {props.t("Bills List")}
+                                    </Link>
+                                </li>
+                            </ul>
+                        </li>
 
                         <AdminWrapper>
                             <li>
