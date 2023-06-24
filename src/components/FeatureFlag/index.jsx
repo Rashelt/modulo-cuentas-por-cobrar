@@ -1,14 +1,14 @@
 import React, { memo, useEffect, useState } from "react";
 import useStore from "../../helpers/store";
 
-export const FeatureFlag = memo((props) => {
+export const FeatureFlag = (props) => {
     const { label } = props;
     const { featureFlags, featuresFlagsByUser, usuario } = useStore();
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState("d-none");
 
     useEffect(() => {
         if (usuario.rol.nombre === "Administrador") {
-            setShow(true);
+            setShow("d-block");
             return;
         }
 
@@ -18,8 +18,8 @@ export const FeatureFlag = memo((props) => {
         const isFeatured = (featuresFlagsByUser || []).find(
             (item) => item.featureFlagId === featureFlag?.id
         );
-        setShow(!!isFeatured);
+        setShow(isFeatured ? "d-block" : "d-none");
     }, []);
 
-    return <div className={!show && "d-none"}>{props.children}</div>;
-});
+    return <div className={show}>{props.children}</div>;
+}
