@@ -96,20 +96,21 @@ const Header = (props) => {
               </Link>
             </div>
 
-            <button
+            {/* <button
               type="button"
               onClick={() => {
                 tToggle();
               }}
               className="btn btn-sm px-3 font-size-16 header-item "
               id="vertical-menu-btn"
-            >
-              <i className="fa fa-fw fa-bars" />
-            </button>
+            > 
+            <i className="fa fa-fw fa-bars" />
+            </button> */}
             <Select
               styles={{
                 container: (baseStyles, state) => ({
                   width: 250,
+                  marginLeft: 15
                 }),
               }}
               options={options}
