@@ -31,12 +31,14 @@ const Header = (props) => {
   const [options, setOptions] = useState([]);
 
   useMount(async () => {
-    await getEmpresas()
-  })
+    await getEmpresas();
+  });
 
   useEffect(() => {
-    setOptions(empresas.map(item => ({ value: item.id, label: item.nombre })));
-  }, [empresas])
+    setOptions(
+      empresas.map((item) => ({ value: item.id, label: item.nombre }))
+    );
+  }, [empresas]);
 
   function toggleFullscreen() {
     if (
@@ -107,19 +109,16 @@ const Header = (props) => {
             <Select
               styles={{
                 container: (baseStyles, state) => ({
-                  width: 250
-                })
+                  width: 250,
+                }),
               }}
               options={options}
-              getOptionValue={(option) =>
-                option?.value
-              }
-              getOptionLabel={(option) =>
-                option?.label
-              }
+              getOptionValue={(option) => option?.value}
+              getOptionLabel={(option) => option?.label}
               value={selectedValue}
               onChange={(value) => {
                 setSelectedValue(value);
+                console.log("entre aqui");
                 updateEmpresaSeleccionada(value.value);
               }}
             />
@@ -182,7 +181,7 @@ const Header = (props) => {
             {/* <NotificationDropdown /> */}
             <ProfileMenu />
 
-            <div
+            {/* <div
               onClick={() => {
                 props.showRightSidebarAction(!props.showRightSidebar);
               }}
@@ -194,7 +193,7 @@ const Header = (props) => {
               >
                 <i className="bx bx-cog bx-spin" />
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </header>

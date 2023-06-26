@@ -3,6 +3,7 @@ import React from "react";
 
 import { Switch, BrowserRouter as Router } from "react-router-dom";
 import { connect } from "react-redux";
+import { Designer } from "@grapecity/activereports-react";
 
 // Import Routes all
 import { authProtectedRoutes, publicRoutes } from "./routes";
@@ -17,6 +18,7 @@ import NonAuthLayout from "./components/NonAuthLayout";
 
 // Import scss
 import "./assets/scss/theme.scss";
+import "./App.css";
 
 // Import Firebase Configuration file
 // import { initFirebaseBackend } from "./helpers/firebase_helper"

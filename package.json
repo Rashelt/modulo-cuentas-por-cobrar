@@ -19,6 +19,7 @@
     "@ckeditor/ckeditor5-react": "^3.0.3",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@grapecity/activereports-react": "^4.0.0",
     "@mui/material": "^5.11.15",
     "@mui/x-data-grid": "^6.0.4",
     "@mui/x-data-grid-premium": "^6.0.4",
